@@ -1,0 +1,27 @@
+# AI code review for merge requests — insomnia
+# (https://gitlab.com/happyT1024/insomnia).
+#
+# The review job is optional by design: it appears on MR pipelines as a
+# manual, non-blocking job (when: manual, allow_failure: true) and never
+# prevents merges. The pipeline below runs on GitLab, so this repository
+# must be mirrored/hosted there for the job to execute.
+#
+# Required CI/CD variables (Settings > CI/CD > Variables):
+#   GITLAB_TOKEN        project access token with `api` scope; posts the
+#                       review summary (CI_JOB_TOKEN cannot write notes or
+#                       discussions). Mask it; protect it only if your MR
+#                       source branches are protected — protected variables
+#                       are not exposed on unprotected refs.
+#   OPENROUTER_API_KEY  OpenRouter API key; omit it to run with the LLM
+#                       disabled (kill switch stays guaranteed).
+#
+# Repository policy lives in `.insomnia.yaml` at the repo root.
+#
+# The include ref and the review job's image tag are released in lockstep;
+# update the integration by bumping the pinned ref to a released insomnia
+# tag. A `latest` tag is never published or referenced.
+
+include:
+  - project: 'happyT1024/insomnia'
+    ref: v0.1.0          # pinned release; updating = bumping this ref
+    file: ci/insomnia-review.gitlab-ci.yml

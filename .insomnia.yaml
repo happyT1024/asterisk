@@ -1,0 +1,37 @@
+# insomnia review policy for this repository.
+# Every field is optional; absent fields take the documented defaults from
+# the insomnia project (normative field table, architecture AD-6).
+
+# Master switch for the review job. `false` disables the run entirely
+# (terminal status `disabled`, zero LLM calls, zero GitLab writes).
+enabled: true
+
+# OpenRouter model identifier used for every review stage. `null` — or an
+# absent key — is the kill switch: no LLM calls are ever made. Set a model
+# to enable LLM review; the OPENROUTER_API_KEY CI/CD variable must be set
+# as well.
+model: null
+
+# LLM endpoint settings (OpenAI-compatible).
+llm:
+  base_url: https://openrouter.ai/api/v1
+
+# Glob patterns excluded from review; these paths produce no Review Units.
+# Binary/asset directories of this repository:
+ignore_paths:
+  - "sounds/**"
+  - "images/**"
+
+# Language of all bot-authored MR text (inline and summary comments).
+comment_language: ru
+
+# Per-run budget caps. Exceeding either stops hunting cleanly, completes
+# validation/reporting of what exists, and discloses the shortfall.
+budget:
+  max_total_tokens: 2000000
+  max_cost_usd: 10.0
+  wall_clock_minutes: 15
+
+# Extra instructions passed to the review agents (appended to stage
+# prompts).
+custom_instructions: ""
